@@ -1,6 +1,5 @@
 package com.company;
 
-
 public class Main {
     static int k = 1;
 
@@ -19,18 +18,7 @@ public class Main {
         double [] X = Main.createArray(Main.x_start, Main.x_end, Main.Nx);
         double [] Y = Main.createArray(Main.y_start, Main.y_end, Main.Ny);
 
-        System.out.print("X= ");
-        Main.outputArray(X);
-        System.out.println();
-        System.out.print("Y= ");
-        Main.outputArray(Y);
-
-        for (int i = 0; i < X.length; ++i){
-            for (int j = 0; j < Y.length; ++j){
-                System.out.println(Main.f2(X[i], Y[i], Main.Z));
-            }
-
-        }
+        Main.outputTable(X, Y, Z);
 
     }
 
@@ -63,6 +51,25 @@ public class Main {
         for (int i = 0; i < A.length; ++i){
             System.out.print(A[i]);
             System.out.print(" ");
+        }
+    }
+
+    private static void outputTable(double[] X, double[] Y, double Z){
+
+        System.out.print(String.format("|%20s|", "X"));
+        System.out.print(String.format("%20s|", "Y"));
+        System.out.print(String.format("%20s|", "Z"));
+        System.out.println(String.format("%20s|", "F"));
+        System.out.println(String.format("|%84s", '|').replace(' ', '-'));
+
+
+        for (int i = 0; i < X.length; ++i) {
+            for (int j = 0; j < Y.length; ++j) {
+                System.out.print(String.format("|%20f|", X[i]));
+                System.out.print(String.format("%20f|", Y[i]));
+                System.out.print(String.format("%20f|", Z));
+                System.out.println(String.format("%20f|", Main.f2(X[i], Y[i], Main.Z)));
+            }
         }
     }
 }
