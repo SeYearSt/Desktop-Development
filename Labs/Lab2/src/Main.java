@@ -6,7 +6,7 @@ public class Main {
         int m = 3;
         int scale = 50;
 
-        int [][] matrix = Main.initMatrix(n, m, scale, false);
+        int [][] matrix = Main.initMatrix(n, m, scale, true);
         Main.outputMatrix(matrix, n, m);
         Main.reverseRowsWithEvenNumbers(matrix, n, m);
         System.out.println();
@@ -64,6 +64,7 @@ public class Main {
             if (Main.isOddArray(matrix[i])) {
                 reversed = true;
                 Main.reverseArray(matrix[i]);
+                System.out.println(String.format("all numbers in A[%d] are odd", i));
             }
         }
         if (!reversed){
