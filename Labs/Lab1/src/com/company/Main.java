@@ -68,7 +68,7 @@ public class Main {
                 System.out.print(String.format("|%20f|", X[i]));
                 System.out.print(String.format("%20f|", Y[i]));
                 System.out.print(String.format("%20f|", Z));
-                System.out.println(String.format("%20f|", Main.f2(X[i], Y[i], Main.Z)));
+                System.out.println(String.format("%20f|", Main.f2(X[i], Y[j], Main.Z)));
             }
         }
     }
