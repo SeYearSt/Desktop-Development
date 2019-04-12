@@ -3,10 +3,11 @@ import java.util.Random;
 public class Main {
     public static void main(String[] args){
         int n = 3;
-        int m = 3;
+        int m = 4;
         int scale = 50;
 
-        int [][] matrix = Main.initMatrix(n, m, scale, true);
+//        int [][] matrix = Main.initMatrix(n, m, scale, true);
+        int [][] matrix = {{1, 3, 5, 7}, {1, 2, 3, 5}, {2, 4, 6, 8}};
         Main.outputMatrix(matrix, n, m);
         Main.reverseRowsWithEvenNumbers(matrix, n, m);
         System.out.println();
@@ -30,6 +31,14 @@ public class Main {
 
         return matrix;
     }
+
+//    static private int [][] initMatrix(int n, int m){
+//        int [][] A = new int [n][m];
+//        for (int i=0; i<)
+//
+//
+//        return A;
+//    }
 
     static private void outputMatrix(int [][]matrix, int n, int m){
         for(int i=0; i<n; ++i) {
@@ -61,9 +70,10 @@ public class Main {
         boolean reversed = false;
 
         for(int i=0; i<n; ++i) {
-            if (Main.isOddArray(matrix[i])) {
+            if (! Main.isOddArray(matrix[i])) {
                 reversed = true;
                 Main.reverseArray(matrix[i]);
+            }else{
                 System.out.println(String.format("all numbers in A[%d] are odd", i));
             }
         }
