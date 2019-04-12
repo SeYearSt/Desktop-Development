@@ -1,6 +1,6 @@
 public class Main {
     public static void main(String[] args) {
-        int n = 3;
+        int n = 4;
         int[][] M = Main.initMatrix(n);
         Main.outputMatrix(M, n, n);
         System.out.println();
@@ -29,20 +29,12 @@ public class Main {
         }
     }
 
-    static public void swapByMinorDiagonal(int [][] M, int n){
+    static public void swapByMinorDiagonal(int [][] M, int n) {
+        for (int i=0; i<n; ++i){
+            for (int j=0; j<n-1-i; ++j){
+                Main.swap(M, i, j, n-1-j, n-1-i);
 
-        for (int i=0; i<n; ++i) {
-            for (int j = 0; j < i; ++j){
-                Main.swap(M, i, j, j, i);
             }
-        }
-
-        for (int i=0; i<n/2; ++i){
-            Main.swapRows(M, i, n-1-i, n);
-        }
-
-        for (int j=0; j<n/2; ++j){
-            Main.swapColumns(M, j, n-1-j, n);
         }
     }
 
