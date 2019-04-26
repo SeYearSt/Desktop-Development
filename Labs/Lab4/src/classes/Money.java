@@ -37,8 +37,9 @@ public class Money {
 
     Money add(Money B){
         long total = integer * 100 + fraction;
-        total += B.getInteger() * 100 + B.getFraction();
-        Money C = new Money(total/100, total - total/100);
+        long newInteger = this.integer + B.getInteger() + (this.fraction + B.getFraction())/100;
+        char newFraction = (char)((this.fraction + B.getFraction())%100);
+        Money C = new Money(newInteger, newFraction);
         return C;
 
     }
