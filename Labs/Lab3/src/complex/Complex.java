@@ -16,6 +16,11 @@ public class Complex {
 
     }
 
+    public Complex(Complex c){
+    a = c.getRe();
+    b = c.getIm();
+    }
+
     public double getRe(){
         return this.a;
     }
