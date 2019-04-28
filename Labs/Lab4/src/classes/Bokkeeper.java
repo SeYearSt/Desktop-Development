@@ -16,12 +16,15 @@ public class Bokkeeper {
     }
 
     public Money sub(Money A, Money B){
-        long newInteger = A.getInteger() - B.getInteger();
+        long totalA = A.getInteger()*100 + A.getFraction();
+        long totalB = B.getInteger()*100 + B.getFraction();
 
-        int newFraction = (A.getFraction() - B.getFraction());
-        Money C = new Money(newInteger, newFraction);
+        long difference = totalA - totalB;
 
-        return C;
+        long newInteger = (long)(difference / 100);
+        int newFraction = (int)(difference % 100);
+
+        return new Money(newInteger, newFraction);
     }
 
     public Money div(Money A, float fraction){
