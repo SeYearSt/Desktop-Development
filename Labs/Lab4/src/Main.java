@@ -4,9 +4,6 @@ public class Main {
     public static void main(String [] args){
         float fraction = 3;
         float d = 4;
-
-//        System.out.println();
-
         Money A = new Money(10, 30);
         Money B = new Money(1, 40);
         System.out.print("A=");
@@ -23,7 +20,5 @@ public class Main {
         System.out.println(A.mul(fraction));
         System.out.print("A==B=");
         System.out.println(A.equal(B));
-
-
-    }
+        }
 }
