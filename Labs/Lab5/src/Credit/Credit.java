@@ -1,49 +1,51 @@
 package Credit;
 
-import java.time.LocalDate;
-
 import java.util.Arrays;
 
 public class Credit {
-    private long sum;
-    private int dateTake, dateGive, duration;
-    private double [] paymentHistory;
-    private double [] paymentSchedule;
-    private double sumInterestRate;
+    protected long sum;
+    protected int dateTake, dateGive, duration;
+    protected double [] paymentHistory;
+    protected double [] paymentSchedule;
+    protected double sumInterestRate;
 
     protected static long minSum = 10000;
-    protected static double firstPaymentPart = 0.3;
+//    protected static double firstPaymentPart = 0.3;
     protected static int minDuration = 6;
     protected static double interestRate = 0.2;
     protected static int firstMonth = 0;
     protected static int lastMonth = 11;
 
 
-    private void initPaymentSchedule(){
-        paymentSchedule = new double [duration];
+    void initPaymentSchedule(){
+        double firstPaymentPart = 0.3;
 
-        paymentSchedule[0] = sumInterestRate*Credit.firstPaymentPart;
-        double otherPaymentPart = sumInterestRate*(1 - Credit.firstPaymentPart)/(duration-1);
+        paymentSchedule = new double[duration];
+
+        paymentSchedule[0] = sumInterestRate*firstPaymentPart;
+        double otherPaymentPart = sumInterestRate*(1 - firstPaymentPart)/(duration-1);
 
         for (int i=1; i<duration; ++i){
             paymentSchedule[i] = otherPaymentPart;
         }
-
     }
 
-    private void checkDate(int date){
+    void checkDate(int date){
         if (date < Credit.firstMonth || date > Credit.lastMonth ){
             throw new IllegalArgumentException(String.format("date cannot be less than %d or more than %d",
                     Credit.firstMonth, Credit.lastMonth));
         }
     }
 
-    public Credit(long sum, int dateTake, int dateGive){
+    void checkSum(double sum){
         if (sum <= 0 || sum < Credit.minSum){
             throw new IllegalArgumentException(String.format("Sum cannot be less than zero " +
                     "or then minimal sum = %d", Credit.minSum));
         }
+    }
 
+    public Credit(long sum, int dateTake, int dateGive){
+        checkSum(sum);
         checkDate(dateTake);
         checkDate(dateGive);
 
@@ -87,9 +89,11 @@ public class Credit {
     }
 
     public double getTotalPaidWithInterestRate(){
-        double totalPaid = Arrays.stream(paymentSchedule).sum();
+//        double totalPaid = Arrays.stream(paymentSchedule).sum();
+//
+//        return totalPaid;
 
-        return totalPaid;
+        return sumInterestRate;
     }
 
     public double [] getPaymentSchedule(){
@@ -108,7 +112,6 @@ public class Credit {
         }
 
         paymentHistory[month] = paymentSchedule[month];
+        paymentSchedule[month] = 0;
     }
-
-
 }
