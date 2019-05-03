@@ -1,16 +1,14 @@
 package Credit;
 
-import java.util.Arrays;
 
 public class Credit {
     protected long sum;
     protected int dateTake, dateGive, duration;
     protected double [] paymentHistory;
     protected double [] paymentSchedule;
-    protected double sumInterestRate;
+    protected double sumWithInterestRate;
 
     protected static long minSum = 10000;
-//    protected static double firstPaymentPart = 0.3;
     protected static int minDuration = 6;
     protected static double interestRate = 0.2;
     protected static int firstMonth = 0;
@@ -22,8 +20,8 @@ public class Credit {
 
         paymentSchedule = new double[duration];
 
-        paymentSchedule[0] = sumInterestRate*firstPaymentPart;
-        double otherPaymentPart = sumInterestRate*(1 - firstPaymentPart)/(duration-1);
+        paymentSchedule[0] = sumWithInterestRate*firstPaymentPart;
+        double otherPaymentPart = sumWithInterestRate*(1 - firstPaymentPart)/(duration-1);
 
         for (int i=1; i<duration; ++i){
             paymentSchedule[i] = otherPaymentPart;
@@ -55,19 +53,69 @@ public class Credit {
         }
 
         this.sum = sum;
-        this.sumInterestRate = sum + sum*Credit.interestRate;
+        this.sumWithInterestRate = sum + sum*Credit.interestRate;
         this.duration = duration;
         this.dateTake = dateTake;
         this.dateGive = dateGive;
+        paymentHistory = new double [duration];
 
         initPaymentSchedule();
-        paymentHistory = new double [duration];
     }
+
+    public Credit(long sum, int dateTake, short duration){
+        int durationInt = (int) duration;
+
+        checkSum(sum);
+        checkDate(dateTake);
+
+        if (duration < Credit.minDuration){
+            throw new IllegalArgumentException(String.format("duration cannot be less than %d", Credit.minDuration));
+        }
+
+        if ((dateTake + duration) > lastMonth){
+            throw new IllegalArgumentException(String.format("duration + dateTake cannot be greater than %d", Credit.lastMonth));
+        }
+
+        this.sum = sum;
+        this.sumWithInterestRate = sum + sum*Credit.interestRate;
+        this.duration = durationInt;
+        this.dateTake = dateTake;
+        this.dateGive = dateTake + duration;
+        paymentHistory = new double [durationInt];
+
+        initPaymentSchedule();
+
+    }
+
+    public Credit(Credit anotherCredit){
+
+        this.sum = anotherCredit.getSum();
+        this.sumWithInterestRate = anotherCredit.getSumWithInterestRate();
+        this.dateTake = anotherCredit.getDateTake();
+        this.dateGive = anotherCredit.getDateGive();
+        this.duration = anotherCredit.getDuration();
+        this.paymentSchedule = anotherCredit.getPaymentSchedule().clone();
+        this.paymentHistory = anotherCredit.getPaymentHistory().clone();
+   }
+
+    public long getSum(){ return sum; }
+
+    public int getDateTake(){ return dateTake; }
+
+    public int getDateGive(){ return dateGive; }
+
+    public int getDuration(){ return duration; }
+
+    public double [] getPaymentHistory(){ return paymentHistory; }
+
+    public  double [] getPaymentSchedule(){ return paymentSchedule; }
+
+    public double getSumWithInterestRate(){ return sumWithInterestRate; }
 
     public double getPaymentScheduleMonth(int month){
         checkDate(month);
 
-        if (month >= 0 && month <= paymentSchedule.length){
+        if (month >= 0 && month < paymentSchedule.length){
             return paymentSchedule[month];
         }
 
@@ -78,9 +126,9 @@ public class Credit {
         checkDate(month);
 
         double totalPaid = 0;
-        if (month >= 0 && month <= paymentHistory.length){
+        if (month >= 0 && month < paymentHistory.length){
 
-            for (int i=0; i <month; ++i){
+            for (int i=0; i <= month; ++i){
                 totalPaid += paymentHistory[i];
             }
         }
@@ -89,20 +137,12 @@ public class Credit {
     }
 
     public double getTotalPaidWithInterestRate(){
-//        double totalPaid = Arrays.stream(paymentSchedule).sum();
-//
-//        return totalPaid;
 
-        return sumInterestRate;
+        return sumWithInterestRate;
     }
 
-    public double [] getPaymentSchedule(){
-        return paymentSchedule;
-    }
 
-    public double [] getPaymentHistory(){
-        return paymentHistory;
-    }
+
 
     public void pay(int month){
         checkDate(month);
