@@ -1,6 +1,8 @@
 package Credit;
 
 
+//TODO: fix pay strategy, if credit from 1 month to 8 month, the same should be in payment history and schedule
+
 public class Credit {
     protected long sum;
     protected int dateTake, dateGive, duration;
@@ -14,16 +16,15 @@ public class Credit {
     protected static int firstMonth = 0;
     protected static int lastMonth = 11;
 
-
     void initPaymentSchedule(){
         double firstPaymentPart = 0.3;
 
-        paymentSchedule = new double[duration];
+        paymentSchedule = new double[dateGive];
 
-        paymentSchedule[0] = sumWithInterestRate*firstPaymentPart;
+        paymentSchedule[dateTake] = sumWithInterestRate*firstPaymentPart;
         double otherPaymentPart = sumWithInterestRate*(1 - firstPaymentPart)/(duration-1);
 
-        for (int i=1; i<duration; ++i){
+        for (int i=dateTake+1; i<dateGive; ++i){
             paymentSchedule[i] = otherPaymentPart;
         }
     }
@@ -53,7 +54,7 @@ public class Credit {
         }
 
         this.sum = sum;
-        this.sumWithInterestRate = sum + sum*Credit.interestRate;
+        this.sumWithInterestRate = (1+Credit.interestRate)*sum;
         this.duration = duration;
         this.dateTake = dateTake;
         this.dateGive = dateGive;
@@ -77,7 +78,7 @@ public class Credit {
         }
 
         this.sum = sum;
-        this.sumWithInterestRate = sum + sum*Credit.interestRate;
+        this.sumWithInterestRate = (1+Credit.interestRate)*sum;
         this.duration = durationInt;
         this.dateTake = dateTake;
         this.dateGive = dateTake + duration;
@@ -112,6 +113,8 @@ public class Credit {
 
     public double getSumWithInterestRate(){ return sumWithInterestRate; }
 
+    public double getInterestRate(){ return interestRate; }
+
     public double getPaymentScheduleMonth(int month){
         checkDate(month);
 
@@ -140,9 +143,6 @@ public class Credit {
 
         return sumWithInterestRate;
     }
-
-
-
 
     public void pay(int month){
         checkDate(month);
