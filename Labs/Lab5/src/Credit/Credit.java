@@ -1,8 +1,6 @@
 package Credit;
 
 
-//TODO: fix pay strategy, if credit from 1 month to 8 month, the same should be in payment history and schedule
-
 public class Credit {
     protected long sum;
     protected int dateTake, dateGive, duration;
@@ -134,6 +132,16 @@ public class Credit {
             for (int i=0; i <= month; ++i){
                 totalPaid += paymentHistory[i];
             }
+        }
+
+        return totalPaid;
+    }
+
+    public double getTotalPaid(){
+        double totalPaid = 0;
+
+        for (int i=0; i <= dateGive; ++i) {
+            totalPaid += paymentHistory[i];
         }
 
         return totalPaid;
