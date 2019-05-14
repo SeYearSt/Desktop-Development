@@ -1,45 +1,26 @@
 package Credit;
 
+import java.util.HashMap;
+import java.util.Calendar;
+import java.text.ParseException;
 
 public class CreditUniform extends Credit{
 
-     void initPaymentSchedule(){
-        paymentSchedule = new double [duration];
+    public CreditUniform(double sum, String dateTakeS, String dateGiveS){
+         super(sum, dateTakeS, dateGiveS);
+         initPaymentSchedule();
+    }
 
-        double monthPayment = sum/duration;
+    void initPaymentSchedule(){
+        paymentSchedule = new HashMap<String, Double>();
 
-        for (int i=0; i<duration; ++i){
-            paymentSchedule[i] = monthPayment;
+        double payment = total/durationMonth;
+        for(int i=0; i<durationMonth; ++i){
+            c.setTime(dateTake);
+            c.add(Calendar.MONTH, i);
+            paymentSchedule.put(dateToKey(c.getTime()), payment);
         }
-
     }
 
-    public CreditUniform(long sum, int dateTake, int dateGive){
-        super(sum, dateTake, dateGive);
-        initPaymentSchedule();
-    }
 
-    public double getTotalPaid(int month){
-        checkDate(month);
-
-        double totalPaid = 0;
-        if (month >= 0 && month < paymentHistory.length){
-
-            for (int i=0; i <= month; ++i){
-                totalPaid += paymentHistory[i];
-            }
-        }
-
-        return totalPaid;
-    }
-
-    public double getTotalPaid(){
-        double totalPaid = 0;
-
-        for (int i=0; i <= dateGive; ++i) {
-            totalPaid += paymentHistory[i];
-        }
-
-        return totalPaid;
-    }
 }

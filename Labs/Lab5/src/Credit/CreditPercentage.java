@@ -1,60 +1,47 @@
 package Credit;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+
 import Credit.Credit;
 
-public class CreditPercentage extends Credit{
-    private double residualPrecent = 0.4;
-    private int lastMonth = paymentSchedule.length-1;
+public class CreditPercentage extends Credit {
+    private double startBody;
 
-    private void checkPayment(double paymentSum){
-        if (paymentSum <= 0){
-            throw new IllegalArgumentException("Payment can't be negative.");
-        }
+    public CreditPercentage(double sum, String dateTakeS, String dateGiveS) {
+        super(sum, dateTakeS, dateGiveS);
+        setStartBody(sum);
+        initPaymentSchedule(keyToDate(getDateTake()), getDuration());
     }
 
-    public CreditPercentage(long sum, int dateTake, int dateGive){
-        super(sum, dateTake, dateGive);
-    }
+    void initPaymentSchedule(Date dateTake, int duration) {
+        paymentSchedule = new HashMap<String, Double>();
 
-    public void pay(double paySum, int month){
-        checkDate(month);
-
-        if (month == lastMonth && paySum < paymentSchedule[lastMonth]){
-            throw new IllegalArgumentException("You can't pay less than you must, because it`s the last month");
+        for (int i = 0; i < durationMonth; ++i) {
+            c.setTime(dateTake);
+            c.add(Calendar.MONTH, i);
+            paymentSchedule.put(dateToKey(c.getTime()), 0.);
         }
 
-        if (month < lastMonth){
-            double residual = paymentSchedule[month] - paySum;
-            paymentSchedule[month+1] += (1+residualPrecent)*residual;
-            paymentHistory[month] = paySum;
-        }
-
-        paymentSchedule[month] = 0;
-
+        paymentSchedule.put("percents", 0.);
     }
 
-    public double getTotalPaid(int month){
-        checkDate(month);
+    public void pay(String dateS, double sum){
+        checkDateS(dateS);
+        checkSum(sum);
 
-        double totalPaid = 0;
-        if (month >= 0 && month < paymentHistory.length){
-
-            for (int i=0; i <= month; ++i){
-                totalPaid += paymentHistory[i];
-            }
-        }
-
-        return totalPaid;
+        paymentHistory.put(dateS, sum);
+        body -= sum;
+        double percents = paymentSchedule.get("percents");
+        percents += body*interestRateMonth;
+        paymentSchedule.put("percents", percents);
     }
 
-    public double getTotalPaid(){
-        double totalPaid = 0;
-
-        for (int i=0; i <= dateGive; ++i) {
-            totalPaid += paymentHistory[i];
-        }
-
-        return totalPaid;
+    public double getTotal(){
+        return getPaymentSchedule("percents") + startBody;
     }
+
+    private void setStartBody(double sum){ startBody = sum; }
 
 }
