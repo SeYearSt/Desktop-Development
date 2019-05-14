@@ -1,165 +1,232 @@
 package Credit;
 
+import java.util.HashMap;
+import java.util.Calendar;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.text.ParseException;
 
 public class Credit {
-    protected long sum;
-    protected int dateTake, dateGive, duration;
-    protected double [] paymentHistory;
-    protected double [] paymentSchedule;
-    protected double sumWithInterestRate;
 
-    protected static long minSum = 10000;
-    protected static int minDuration = 6;
+    protected static int minSum = 10000;
+    protected static int minDurationMonth = 6;
     protected static double interestRate = 0.2;
-    protected static int firstMonth = 0;
-    protected static int lastMonth = 11;
+    private static double firstPaymentPart = 0.3;
 
-    void initPaymentSchedule(){
-        double firstPaymentPart = 0.3;
+    double body, total;
+    int durationMonth;
+    Date dateTake, dateGive;
+    HashMap <String, Double> paymentHistory, paymentSchedule;
 
-        paymentSchedule = new double[dateGive];
+    Calendar c = Calendar.getInstance();
+    String dateFormat = "MM-yyyy";
+    SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
 
-        paymentSchedule[dateTake] = sumWithInterestRate*firstPaymentPart;
-        double otherPaymentPart = sumWithInterestRate*(1 - firstPaymentPart)/(duration-1);
-
-        for (int i=dateTake+1; i<dateGive; ++i){
-            paymentSchedule[i] = otherPaymentPart;
-        }
-    }
-
-    void checkDate(int date){
-        if (date < Credit.firstMonth || date > Credit.lastMonth ){
-            throw new IllegalArgumentException(String.format("date cannot be less than %d or more than %d",
-                    Credit.firstMonth, Credit.lastMonth));
-        }
-    }
-
-    void checkSum(double sum){
-        if (sum <= 0 || sum < Credit.minSum){
-            throw new IllegalArgumentException(String.format("Sum cannot be less than zero " +
-                    "or then minimal sum = %d", Credit.minSum));
-        }
-    }
-
-    public Credit(long sum, int dateTake, int dateGive){
+    public Credit(double sum){
         checkSum(sum);
-        checkDate(dateTake);
-        checkDate(dateGive);
+        Date dateTake = new Date();
+        Date dateGive = addDate(dateTake, minDurationMonth);
 
-        int duration = dateGive - dateTake;
-        if (duration < Credit.minDuration){
-            throw new IllegalArgumentException(String.format("duration cannot be less than %d", Credit.minDuration));
-        }
+        setBody(sum);
+        setDurationMonth(minDurationMonth);
+        initTotal();
 
-        this.sum = sum;
-        this.sumWithInterestRate = (1+Credit.interestRate)*sum;
-        this.duration = duration;
-        this.dateTake = dateTake;
-        this.dateGive = dateGive;
-        paymentHistory = new double [duration];
-
-        initPaymentSchedule();
+        setDateTake(dateTake);
+        setDateGive(dateGive);
+        initPaymentSchedule(dateTake, this.durationMonth);
+        initPaymentHistory(dateTake, dateGive);
     }
 
-    public Credit(long sum, int dateTake, short duration){
-        int durationInt = (int) duration;
-
+    public Credit(double sum, int duration){
         checkSum(sum);
-        checkDate(dateTake);
+        checkDuration(duration);
 
-        if (duration < Credit.minDuration){
-            throw new IllegalArgumentException(String.format("duration cannot be less than %d", Credit.minDuration));
-        }
+        Date dateTake = new Date();
+        Date dateGive = addDate(dateTake, duration);
 
-        if ((dateTake + duration) > lastMonth){
-            throw new IllegalArgumentException(String.format("duration + dateTake cannot be greater than %d", Credit.lastMonth));
-        }
+        setBody(sum);
+        setDurationMonth(durationMonth);
+        initTotal();
 
-        this.sum = sum;
-        this.sumWithInterestRate = (1+Credit.interestRate)*sum;
-        this.duration = durationInt;
-        this.dateTake = dateTake;
-        this.dateGive = dateTake + duration;
-        paymentHistory = new double [durationInt];
+        setDateTake(dateTake);
+        setDateGive(dateGive);
+        initPaymentSchedule(dateTake, this.durationMonth);
+        initPaymentHistory(dateTake, dateGive);
+    }
 
-        initPaymentSchedule();
+    public Credit(double sum, String dateTakeS, String dateGiveS){
+        checkSum(sum);
+        checkDateS(dateTakeS);
+        checkDateS(dateGiveS);
 
+        dateTake = keyToDate(dateTakeS);
+        dateGive = keyToDate(dateGiveS);
+        durationMonth = getDurationMonth(dateTake, dateGive);
+
+        setBody(sum);
+        setDurationMonth(durationMonth);
+        initTotal();
+
+        setDateTake(dateTake);
+        setDateGive(dateGive);
+        initPaymentSchedule(dateTake, durationMonth);
+        initPaymentHistory(dateTake, dateGive);
     }
 
     public Credit(Credit anotherCredit){
 
-        this.sum = anotherCredit.getSum();
-        this.sumWithInterestRate = anotherCredit.getSumWithInterestRate();
-        this.dateTake = anotherCredit.getDateTake();
-        this.dateGive = anotherCredit.getDateGive();
-        this.duration = anotherCredit.getDuration();
-        this.paymentSchedule = anotherCredit.getPaymentSchedule().clone();
-        this.paymentHistory = anotherCredit.getPaymentHistory().clone();
+        this.body = anotherCredit.getBody();
+        this.total = anotherCredit.getTotal();
+        this.dateTake = keyToDate(anotherCredit.getDateTake());
+        this.dateGive = keyToDate(anotherCredit.getDateGive());
+        this.durationMonth = anotherCredit.getDuration();
+        this.paymentSchedule = new HashMap<String, Double> (anotherCredit.getPaymentSchedule());
+        this.paymentHistory = new HashMap<String, Double> (anotherCredit.getPaymentHistory());
    }
 
-    public long getSum(){ return sum; }
+    // --------------- Interface
 
-    public int getDateTake(){ return dateTake; }
+    public double getBody(){ return body; }
 
-    public int getDateGive(){ return dateGive; }
+    public double getTotal(){ return total; }
 
-    public int getDuration(){ return duration; }
+    public int getDuration(){ return durationMonth; }
 
-    public double [] getPaymentHistory(){ return paymentHistory; }
+    public String getDateTake(){ return dateToKey(dateTake); }
 
-    public  double [] getPaymentSchedule(){ return paymentSchedule; }
+    public String getDateGive(){ return dateToKey(dateGive); }
 
-    public double getSumWithInterestRate(){ return sumWithInterestRate; }
+    public HashMap getPaymentHistory() { return paymentHistory; }
 
-    public double getInterestRate(){ return interestRate; }
+    public HashMap getPaymentSchedule(){ return paymentSchedule; }
 
-    public double getPaymentScheduleMonth(int month){
-        checkDate(month);
+    double getPaymentScheduleMonth(String dateS){
+        checkDateS(dateS);
 
-        if (month >= 0 && month < paymentSchedule.length){
-            return paymentSchedule[month];
-        }
-
-        throw new ArrayIndexOutOfBoundsException("month out of paymentSchedule's bounds");
+        return paymentSchedule.get(dateS);
     }
 
-    public double getTotalPaid(int month){
-        checkDate(month);
+    public double getTotalPaid(String dateS){
+        checkDateS(dateS);
 
-        double totalPaid = 0;
-        if (month >= 0 && month < paymentHistory.length){
+        Date startDate = dateTake;
+        Date endDate = keyToDate(dateS);
+        c.setTime(startDate);
+        double totalSum = 0;
 
-            for (int i=0; i <= month; ++i){
-                totalPaid += paymentHistory[i];
-            }
+        while(getDurationMonth(c.getTime(), endDate) != 0){
+            totalSum += getPaymentHistory(dateToKey(c.getTime()));
         }
 
-        return totalPaid;
+        return totalSum;
+    }
+
+    public double getPaymentHistory(String dateS){
+        checkDateS(dateS);
+
+        return paymentHistory.get(dateS);
     }
 
     public double getTotalPaid(){
-        double totalPaid = 0;
-
-        for (int i=0; i <= dateGive; ++i) {
-            totalPaid += paymentHistory[i];
-        }
-
-        return totalPaid;
+//        double totalPaid = 0;
+//
+//        for (int i=0; i <= dateGive; ++i) {
+//            totalPaid += paymentHistory[i];
+//        }
+//
+//        return totalPaid;
+        return 0;
     }
 
-    public double getTotalPaidWithInterestRate(){
+    public void pay(String dateS){
+//        checkDate(month);
 
-        return sumWithInterestRate;
+        paymentHistory.put(dateS, paymentSchedule.get(dateS));
+        paymentSchedule.put(dateS, 0.);
+//        paymentHistory[month] = paymentSchedule[month];
+//        paymentSchedule[month] = 0;
     }
 
-    public void pay(int month){
-        checkDate(month);
+    public double getInterestRate() { return interestRate; }
 
-        if (month < 0 && month >= paymentSchedule.length){
-            throw new ArrayIndexOutOfBoundsException("month out of paymentSchedule's bounds");
+    // --------------- Setters
+
+    private void setBody(double sum){ body = sum; }
+
+    private void initTotal(){
+        total = (1+interestRate/12*durationMonth)*body;
+    }
+
+    private void setDurationMonth(int durationMonth) { this.durationMonth = durationMonth;}
+
+    private void setDateTake(Date d){ dateTake = d; }
+
+    private void setDateGive(Date d){ dateGive = d; }
+
+    private void initPaymentSchedule(Date dateTake, int duration){
+        paymentSchedule = new HashMap();
+
+        double firstPayment = total*firstPaymentPart;
+        double otherPayment = total*(1-firstPaymentPart)/durationMonth;
+        c.setTime(dateTake);
+        paymentSchedule.put(dateToKey(c.getTime()), firstPayment);
+        for(int i=1; i<durationMonth; ++i){
+            c.setTime(dateTake);
+            c.add(Calendar.MONTH, i);
+            paymentSchedule.put(dateToKey(c.getTime()), otherPayment);
         }
+    }
 
-        paymentHistory[month] = paymentSchedule[month];
-        paymentSchedule[month] = 0;
+    private void initPaymentHistory(Date dateTake, Date dateGive){
+        paymentHistory = new HashMap();
+    }
+
+    // --------------- Helpers
+
+    private void checkSum(double sum){
+
+    }
+
+    private void checkDateS(String dateS){
+
+    }
+
+    private void checkDuration(int duration){
+
+    }
+
+    private String dateToKey(Date d){
+        String key = sdf.format(d);
+        return key;
+    }
+
+    private  Date keyToDate(String key){
+        try {
+            return sdf.parse(key);
+        } catch (java.text.ParseException pe) {
+            throw new IllegalArgumentException(String.format("Incorrect date format, expect %s", dateFormat));
+        }
+    }
+
+    private int getDurationMonth(Date a, Date b){
+        c.setTime(a);
+        int y1 = c.get(Calendar.YEAR), m1 = c.get(Calendar.MONTH);
+        c.setTime(b);
+        int y2 = c.get(Calendar.YEAR), m2 = c.get(Calendar.MONTH);
+        int duration  = (y2 - y1)*12 + m2 - m1;
+
+        return duration;
+    }
+
+    private Date addDate(Date d, int months){
+        c.setTime(d);
+        c.add(Calendar.MONTH, months);
+
+        return new Date();
+    }
+
+    private Date addDate(Date d1, Date d2){
+
+        return new Date();
     }
 }
