@@ -11,7 +11,8 @@ public class Credit {
     protected static int minSum = 10000;
     protected static int minDurationMonth = 6;
     protected static double interestRate = 0.2;
-    private static double firstPaymentPart = 0.3;
+    protected static double  interestRateMonth = interestRate/12;
+    static double firstPaymentPart = 0.3;
 
     double body, total;
     int durationMonth;
@@ -34,7 +35,7 @@ public class Credit {
         setDateTake(dateTake);
         setDateGive(dateGive);
         initPaymentSchedule(dateTake, this.durationMonth);
-        initPaymentHistory(dateTake, dateGive);
+        initPaymentHistory();
     }
 
     public Credit(double sum, int duration){
@@ -51,7 +52,7 @@ public class Credit {
         setDateTake(dateTake);
         setDateGive(dateGive);
         initPaymentSchedule(dateTake, this.durationMonth);
-        initPaymentHistory(dateTake, dateGive);
+        initPaymentHistory();
     }
 
     public Credit(double sum, String dateTakeS, String dateGiveS){
@@ -70,7 +71,7 @@ public class Credit {
         setDateTake(dateTake);
         setDateGive(dateGive);
         initPaymentSchedule(dateTake, durationMonth);
-        initPaymentHistory(dateTake, dateGive);
+        initPaymentHistory();
     }
 
     public Credit(Credit anotherCredit){
@@ -86,21 +87,35 @@ public class Credit {
 
     // --------------- Interface
 
-    public double getBody(){ return body; }
+    public double getBody(){
+        return body;
+    }
 
-    public double getTotal(){ return total; }
+    public double getTotal(){
+        return total;
+    }
 
-    public int getDuration(){ return durationMonth; }
+    public int getDuration() {
+        return durationMonth;
+    }
 
-    public String getDateTake(){ return dateToKey(dateTake); }
+    public String getDateTake() {
+        return dateToKey(dateTake);
+    }
 
-    public String getDateGive(){ return dateToKey(dateGive); }
+    public String getDateGive(){
+        return dateToKey(dateGive);
+    }
 
-    public HashMap getPaymentHistory() { return paymentHistory; }
+    public HashMap getPaymentHistory() {
+        return paymentHistory;
+    }
 
-    public HashMap getPaymentSchedule(){ return paymentSchedule; }
+    public HashMap getPaymentSchedule(){
+        return paymentSchedule;
+    }
 
-    double getPaymentScheduleMonth(String dateS){
+    public double getPaymentSchedule(String dateS){
         checkDateS(dateS);
 
         return paymentSchedule.get(dateS);
@@ -123,47 +138,37 @@ public class Credit {
 
     public double getPaymentHistory(String dateS){
         checkDateS(dateS);
-
-        return paymentHistory.get(dateS);
-    }
-
-    public double getTotalPaid(){
-//        double totalPaid = 0;
-//
-//        for (int i=0; i <= dateGive; ++i) {
-//            totalPaid += paymentHistory[i];
-//        }
-//
-//        return totalPaid;
-        return 0;
+        double record = paymentHistory.containsKey(dateS)? paymentHistory.get(dateS): 0;
+        return record;
     }
 
     public void pay(String dateS){
-//        checkDate(month);
+        checkDateS(dateS);
 
         paymentHistory.put(dateS, paymentSchedule.get(dateS));
         paymentSchedule.put(dateS, 0.);
-//        paymentHistory[month] = paymentSchedule[month];
-//        paymentSchedule[month] = 0;
+        body -= paymentSchedule.get(dateS);
     }
 
     public double getInterestRate() { return interestRate; }
 
+    public double getInterestRateMonth() { return interestRateMonth; }
+
     // --------------- Setters
 
-    private void setBody(double sum){ body = sum; }
+    void setBody(double sum){ body = sum; }
 
-    private void initTotal(){
+    void initTotal(){
         total = (1+interestRate/12*durationMonth)*body;
     }
 
-    private void setDurationMonth(int durationMonth) { this.durationMonth = durationMonth;}
+     void setDurationMonth(int durationMonth) { this.durationMonth = durationMonth;}
 
-    private void setDateTake(Date d){ dateTake = d; }
+     void setDateTake(Date d){ dateTake = d; }
 
-    private void setDateGive(Date d){ dateGive = d; }
+     void setDateGive(Date d){ dateGive = d; }
 
-    private void initPaymentSchedule(Date dateTake, int duration){
+     void initPaymentSchedule(Date dateTake, int duration){
         paymentSchedule = new HashMap();
 
         double firstPayment = total*firstPaymentPart;
@@ -177,30 +182,30 @@ public class Credit {
         }
     }
 
-    private void initPaymentHistory(Date dateTake, Date dateGive){
+     void initPaymentHistory(){
         paymentHistory = new HashMap();
     }
 
     // --------------- Helpers
 
-    private void checkSum(double sum){
+     void checkSum(double sum){
 
     }
 
-    private void checkDateS(String dateS){
+     void checkDateS(String dateS){
 
     }
 
-    private void checkDuration(int duration){
+     void checkDuration(int duration){
 
     }
 
-    private String dateToKey(Date d){
+     String dateToKey(Date d){
         String key = sdf.format(d);
         return key;
     }
 
-    private  Date keyToDate(String key){
+     Date keyToDate(String key){
         try {
             return sdf.parse(key);
         } catch (java.text.ParseException pe) {
@@ -208,7 +213,7 @@ public class Credit {
         }
     }
 
-    private int getDurationMonth(Date a, Date b){
+     int getDurationMonth(Date a, Date b){
         c.setTime(a);
         int y1 = c.get(Calendar.YEAR), m1 = c.get(Calendar.MONTH);
         c.setTime(b);
@@ -218,14 +223,14 @@ public class Credit {
         return duration;
     }
 
-    private Date addDate(Date d, int months){
+     Date addDate(Date d, int months){
         c.setTime(d);
         c.add(Calendar.MONTH, months);
 
         return new Date();
     }
 
-    private Date addDate(Date d1, Date d2){
+     Date addDate(Date d1, Date d2){
 
         return new Date();
     }
