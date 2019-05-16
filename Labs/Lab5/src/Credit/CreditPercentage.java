@@ -31,11 +31,20 @@ public class CreditPercentage extends Credit {
         checkDateS(dateS);
         checkSum(sum);
 
+        String dateGiveS = dateToKey(dateGive);
+
         paymentHistory.put(dateS, sum);
         body -= sum;
+
         double percents = paymentSchedule.get("percents");
         percents += body*interestRateMonth;
         paymentSchedule.put("percents", percents);
+
+        if (dateGiveS.equals(dateS)){
+            System.out.print("Overpay: ");
+            System.out.println(paymentSchedule.get("percentage"));
+        }
+
     }
 
     public double getTotal(){
@@ -43,5 +52,17 @@ public class CreditPercentage extends Credit {
     }
 
     private void setStartBody(double sum){ startBody = sum; }
+
+    public double getPaymentSchedule(String dateS){
+        checkDateS(dateS);
+
+        System.out.print(" ");
+
+        return paymentSchedule.get(dateS);
+    }
+
+    public double getOverpay(){
+        return paymentSchedule.get("percents");
+    }
 
 }

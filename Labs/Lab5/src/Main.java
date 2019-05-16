@@ -3,23 +3,25 @@ import Credit.CreditPercentage;
 import Credit.CreditSpecial;
 import Credit.CreditUniform;
 
-import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
+
 
 public class Main {
     public static void main(String [] args){
-        testCredit(10000, 3 , 9);
-//        testCreditUniform(11000, 1, 8);
-//        testCreditPercentage(20000, 0, 7);
-//        testCreditSpecial(25000, 0 ,7);
+        testCredit(10000, "11-2019" , "10-2020");
+        testCreditPercentage(10000, "12-2019" , "12-2020");
+//        testCreditUniform(10000, "11-2019" , "11-2020");
+//        testCreditSpecial(10000, "11-2019" , "11-2020");
     }
 
-    static private void testCredit(int sum, int dateTake, int dateGive){
+    static private void testCredit(int sum, String dateTake, String  dateGive){
 
         Credit credit = new Credit(sum, dateTake, dateGive);
 
-        int paymentMonth = (dateTake + dateGive)/3;
-        int totalPaymentMonth = (dateTake + dateGive)/2;
-        int numberPayMonth = (dateTake + dateGive)/2;
+        int paymentMonth = 6;
+        int totalPaymentMonth = 8;
+        int numberPayMonth = 12;
 
         System.out.print("Sum: ");
         System.out.println(sum);
@@ -28,148 +30,176 @@ public class Main {
         System.out.println(credit.getInterestRate());
 
         System.out.print("Total sum with interest rate: ");
-        System.out.println(credit.getTotalPaidWithInterestRate());
+        System.out.println(credit.getTotal());
 
         System.out.print("Date when credit taken: ");
         System.out.println(dateTake);
         System.out.print("Date when credit given: ");
         System.out.println(dateGive);
 
-        for(int month=0; month<numberPayMonth; ++month) {
-            System.out.print(String.format("Pay for %d month: ", month));
-            System.out.println(credit.getPaymentScheduleMonth(month));
-            credit.pay(month);
-        }
+//        for(int month=0; month<numberPayMonth; ++month) {
+//            System.out.print(String.format("Pay for %d month: ", month));
+//            System.out.println(credit.getPaymentSchedule());
+//            credit.pay(month);
+//        }
 
         System.out.print("Payment history: ");
-        System.out.println(Arrays.toString(credit.getPaymentHistory()));
+        System.out.println(credit.getPaymentHistory());
         System.out.print("Payment Schedule: ");
-        System.out.println(Arrays.toString(credit.getPaymentSchedule()));
+        System.out.println(credit.getPaymentSchedule());
 
-        double moneyToPay = credit.getPaymentScheduleMonth(paymentMonth);
+        double moneyToPay = credit.getPaymentSchedule(dateTake);
         System.out.println(String.format("You should pay %f money in %d month: ",moneyToPay, paymentMonth));
 
+        credit.pay(dateTake);
+
         System.out.print(String.format("Total paid unit %d month: ", totalPaymentMonth));
-        System.out.println(credit.getTotalPaid(totalPaymentMonth));
+        System.out.println(credit.getTotalPaid(dateGive));
         System.out.print("Total sum with interest rate: ");
-        System.out.println(credit.getTotalPaidWithInterestRate());
+        System.out.println(credit.getTotal());
+        System.out.print("Ovepay: ");
+        System.out.println(credit.getOverpay());
     }
 
-    static private void testCreditUniform(int sum, int dateTake, int dateGive){
-        Credit creditUniform = new CreditUniform(sum, 0, 6);
+    static private void testCreditUniform(int sum, String dateTake, String  dateGive){
 
-        int paymentMonth = 0;
-        int totalPaymentMonth = 4;
-        int numberPayMonth = 3;
+        CreditUniform credit = new CreditUniform(sum, dateTake, dateGive);
+
+        int paymentMonth = 6;
+        int totalPaymentMonth = 8;
+        int numberPayMonth = 12;
 
         System.out.print("Sum: ");
         System.out.println(sum);
 
         System.out.print("Interest rate: ");
-        System.out.println(creditUniform.getInterestRate());
+        System.out.println(credit.getInterestRate());
 
         System.out.print("Total sum with interest rate: ");
-        System.out.println(creditUniform.getTotalPaidWithInterestRate());
+        System.out.println(credit.getTotal());
 
-        System.out.print("Date when creditUniform taken: ");
+        System.out.print("Date when credit taken: ");
         System.out.println(dateTake);
-        System.out.print("Date when creditUniform given: ");
+        System.out.print("Date when credit given: ");
         System.out.println(dateGive);
 
-        for(int month=0; month<numberPayMonth; ++month) {
-            System.out.print(String.format("Pay for %d month: ", month));
-            System.out.println(creditUniform.getPaymentScheduleMonth(month));
-            creditUniform.pay(month);
-        }
+        credit.pay("10-2019");
+        credit.pay("11-2019");
+        credit.pay("12-2019");
+
 
         System.out.print("Payment history: ");
-        System.out.println(Arrays.toString(creditUniform.getPaymentHistory()));
+        System.out.println(credit.getPaymentHistory());
         System.out.print("Payment Schedule: ");
-        System.out.println(Arrays.toString(creditUniform.getPaymentSchedule()));
+        System.out.println(credit.getPaymentSchedule());
 
-        double moneyToPay = creditUniform.getPaymentScheduleMonth(paymentMonth);
+        double moneyToPay = credit.getPaymentSchedule(dateTake);
         System.out.println(String.format("You should pay %f money in %d month: ",moneyToPay, paymentMonth));
 
+        credit.pay(dateTake);
+
         System.out.print(String.format("Total paid unit %d month: ", totalPaymentMonth));
-        System.out.println(creditUniform.getTotalPaid(4));
+        System.out.println(credit.getTotalPaid(dateGive));
     }
 
-    static private void testCreditPercentage(int sum, int dateTake, int dateGive){
-        CreditPercentage creditPercentage = new CreditPercentage(20000, 0, 6);
+    static private void testCreditPercentage(int sum, String dateTake, String  dateGive){
 
-        int paymentMonth = 0;
-        int totalPaymentMonth = 4;
-        int numberPayMonth = 3;
+    CreditPercentage credit = new CreditPercentage(sum, dateTake, dateGive);
+
+    int paymentMonth = 6;
+    int totalPaymentMonth = 8;
+    int numberPayMonth = 12;
+
+    System.out.print("Sum: ");
+    System.out.println(sum);
+
+    System.out.print("Interest rate: ");
+    System.out.println(credit.getInterestRate());
+
+    System.out.print("Total sum with interest rate: ");
+    System.out.println(credit.getTotal());
+
+    System.out.print("Date when credit taken: ");
+    System.out.println(dateTake);
+    System.out.print("Date when credit given: ");
+    System.out.println(dateGive);
+
+    double payPart = 1000;
+
+    credit.pay("10-2019", payPart);
+    credit.pay("11-2019", payPart);
+    credit.pay("12-2019", payPart);
+    credit.pay("01-2020", payPart);
+    credit.pay("02-2020", payPart);
+    credit.pay("03-2020", payPart);
+    credit.pay("04-2020", payPart);
+    credit.pay("05-2020", payPart);
+    credit.pay("06-2020", payPart);
+    credit.pay("07-2020", payPart);
+    credit.pay("08-2020", payPart);
+    credit.pay("09-2020", payPart);
+    credit.pay("10-2020", payPart);
+
+    System.out.print("Payment history: ");
+    System.out.println(credit.getPaymentHistory());
+    System.out.print("Payment Schedule: ");
+    System.out.println(credit.getPaymentSchedule());
+
+    double moneyToPay = credit.getPaymentSchedule(dateTake);
+    System.out.println(String.format("You should pay %f money in %d month: ",moneyToPay, paymentMonth));
+
+    credit.pay(dateTake);
+
+    System.out.print(String.format("Total paid unit %d month: ", totalPaymentMonth));
+    System.out.println(credit.getTotalPaid(dateGive));
+    System.out.print("Total sum with interest rate: ");
+    System.out.println(credit.getTotal());
+    System.out.print("Overpay: ");
+    System.out.println(credit.getOverpay());
+}
+
+    static private void testCreditSpecial(int sum, String dateTake, String  dateGive){
+
+        CreditSpecial credit = new CreditSpecial(sum, dateTake, dateGive);
+
+        int paymentMonth = 6;
+        int totalPaymentMonth = 8;
+        int numberPayMonth = 12;
 
         System.out.print("Sum: ");
         System.out.println(sum);
 
         System.out.print("Interest rate: ");
-        System.out.println(creditPercentage.getInterestRate());
+        System.out.println(credit.getInterestRate());
+
+        System.out.print("Interest goverment dotation rate: ");
+        System.out.println(credit.getGovermentDotationRate());
 
         System.out.print("Total sum with interest rate: ");
-        System.out.println(creditPercentage.getTotalPaidWithInterestRate());
+        System.out.println(credit.getTotal());
 
-        System.out.print("Date when creditPercentage taken: ");
+        System.out.print("Date when credit taken: ");
         System.out.println(dateTake);
-        System.out.print("Date when creditPercentage given: ");
+        System.out.print("Date when credit given: ");
         System.out.println(dateGive);
 
-        for(int month=0; month<numberPayMonth; ++month) {
-            System.out.print(String.format("Pay for %d month: ", month));
-            System.out.println(creditPercentage.getPaymentScheduleMonth(month));
-            creditPercentage.pay(month);
-        }
+        credit.pay("10-2019");
 
         System.out.print("Payment history: ");
-        System.out.println(Arrays.toString(creditPercentage.getPaymentHistory()));
+        System.out.println(credit.getPaymentHistory());
         System.out.print("Payment Schedule: ");
-        System.out.println(Arrays.toString(creditPercentage.getPaymentSchedule()));
+        System.out.println(credit.getPaymentSchedule());
 
-        double moneyToPay = creditPercentage.getPaymentScheduleMonth(paymentMonth);
+        double moneyToPay = credit.getPaymentSchedule(dateTake);
+
         System.out.println(String.format("You should pay %f money in %d month: ",moneyToPay, paymentMonth));
 
+        credit.pay(dateTake);
+
         System.out.print(String.format("Total paid unit %d month: ", totalPaymentMonth));
-        System.out.println(creditPercentage.getTotalPaid(4));
-    }
-
-    static private void testCreditSpecial(int sum, int dateTake, int dateGive) {
-        CreditSpecial creditSpecial = new CreditSpecial(10000, 0, 6);
-
-        int paymentMonth = 0;
-        int totalPaymentMonth = 4;
-        int numberPayMonth = 3;
-
-        System.out.print("Sum: ");
-        System.out.println(sum);
-
-        System.out.print("Interest rate: ");
-        System.out.println(creditSpecial.getInterestRate());
-
+        System.out.println(credit.getTotalPaid(dateGive));
         System.out.print("Total sum with interest rate: ");
-        System.out.println(creditSpecial.getTotalPaidWithInterestRate());
-
-        System.out.print("Date when creditSpecial taken: ");
-        System.out.println(dateTake);
-        System.out.print("Date when creditSpecial given: ");
-        System.out.println(dateGive);
-
-        for (int month = 0; month < numberPayMonth; ++month) {
-            System.out.print(String.format("Pay for %d month: ", month));
-            System.out.println(creditSpecial.getPaymentScheduleMonth(month));
-            creditSpecial.pay(month);
-        }
-
-        System.out.print("Payment history: ");
-        System.out.println(Arrays.toString(creditSpecial.getPaymentHistory()));
-        System.out.print("Payment Schedule: ");
-        System.out.println(Arrays.toString(creditSpecial.getPaymentSchedule()));
-
-        double moneyToPay = creditSpecial.getPaymentScheduleMonth(paymentMonth);
-        System.out.println(String.format("You should pay %f money in %d month: ", moneyToPay, paymentMonth));
-
-        System.out.print(String.format("Total paid unit %d month: ", totalPaymentMonth));
-        System.out.println(creditSpecial.getTotalPaid(4));
+        System.out.println(credit.getTotal());
     }
 
 }

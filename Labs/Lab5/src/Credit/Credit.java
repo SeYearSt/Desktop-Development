@@ -136,6 +136,10 @@ public class Credit {
         return totalSum;
     }
 
+    public double getOverpay(){
+        return total - body;
+    }
+
     public double getPaymentHistory(String dateS){
         checkDateS(dateS);
         double record = paymentHistory.containsKey(dateS)? paymentHistory.get(dateS): 0;
