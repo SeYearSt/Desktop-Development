@@ -1,4 +1,5 @@
 import deposit.Deposit;
+import deposit.DepositInterfaceAdvanced;
 import depositStatic.DepositStatic;
 import depositDynamic.DepositDynamic;
 import rate.RateYear;
@@ -11,13 +12,13 @@ public class Main {
         RateYear rateYear = new RateYear(rateYearConst);
         RateQuarter rateQuarter = new RateQuarter(ratesQuarters);
 
-        DepositStatic depositStatic = new DepositStatic("John", 1000, rateYear, 12);
-        DepositDynamic depositDynamic = new DepositDynamic("Sandy", 2000, rateQuarter, 4);
+        Deposit depositStatic = new DepositStatic("John", 1000, rateYear, 12);
+        DepositInterfaceAdvanced depositDynamic = new DepositDynamic("Sandy", 2000, rateQuarter, 4);
         testDeposit(depositStatic);
         testDeposit(depositDynamic);
     }
 
-    static void testDeposit(Deposit deposit){
+    static void testDeposit(DepositInterfaceAdvanced deposit){
         System.out.println("Client's name: " + deposit.getName());
         System.out.println("Deposit sum: " + deposit.getSum());
         System.out.println("Deposit rate : " + deposit.getRate());
