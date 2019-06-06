@@ -4,8 +4,8 @@
     <list default="true" id="61d78f09-058f-4594-a1c5-d688ed197d00" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/../Lab6/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Lab6/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Lab8/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Lab8/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/MyMatrix.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MyMatrix.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Reports/.~lock.Венгринюк_О_ЛР8.odt#" beforeDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -23,8 +23,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/MyMatrix.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-545">
-              <caret line="118" column="34" selection-start-line="118" selection-start-column="34" selection-end-line="118" selection-end-column="34" />
+            <state relative-caret-position="539">
+              <caret line="191" column="38" selection-start-line="191" selection-start-column="38" selection-end-line="191" selection-end-column="38" />
               <folding>
                 <element signature="e#194#195#0" expanded="true" />
                 <element signature="e#221#222#0" expanded="true" />
@@ -168,7 +168,7 @@
       <window_info anchor="bottom" id="Messages" weight="0.3289256" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.1983471" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.21652892" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.49917355" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -193,8 +193,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/MyMatrix.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-545">
-          <caret line="118" column="34" selection-start-line="118" selection-start-column="34" selection-end-line="118" selection-end-column="34" />
+        <state relative-caret-position="539">
+          <caret line="191" column="38" selection-start-line="191" selection-start-column="38" selection-end-line="191" selection-end-column="38" />
           <folding>
             <element signature="e#194#195#0" expanded="true" />
             <element signature="e#221#222#0" expanded="true" />

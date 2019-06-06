@@ -103,7 +103,15 @@ public class MyMatrix {
     }
 
     public MyMatrix add(MyMatrix a){
-        // TODO: check M dimension
+        try {
+            if ((a.getDim(0) != n) || a.getDim(1) != m) {
+                throw new IllegalArgumentException("Invalid matrix's dimensions");
+            }
+        }catch(ArrayIndexOutOfBoundsException excpetion){
+            System.out.println("Invalid matrix's dimensions");
+            System.out.println("Return first matrix");
+            return this;
+        }
         double[][] res = new double[n][m];
         double[][] aArray = a.getArray();
 
@@ -116,7 +124,15 @@ public class MyMatrix {
     }
 
     public MyMatrix sub(MyMatrix a){
-        // TODO: check M dimension
+        try {
+            if ((a.getDim(0) != n) || a.getDim(1) != m) {
+                throw new IllegalArgumentException("Invalid matrix's dimensions");
+            }
+        }catch(ArrayIndexOutOfBoundsException excpetion){
+            System.out.println("Invalid matrix's dimensions");
+            System.out.println("Return first matrix");
+            return this;
+        }
         double[][] res = new double[n][m];
         double[][] aArray = a.getArray();
 
@@ -129,7 +145,15 @@ public class MyMatrix {
     }
 
     public MyMatrix mul(MyMatrix a) {
-//        // TODO: check M dimension
+        try {
+            if (m != a.getDim(0)) {
+                throw new IllegalArgumentException("Invalid matrix's dimensions");
+            }
+        }catch(ArrayIndexOutOfBoundsException excpetion){
+            System.out.println("Invalid matrix's dimensions");
+            System.out.println("Return empty matrix");
+            return this;
+        }
 
         int n = this.n;
         int m = a.getDim(1);
