@@ -17,7 +17,10 @@ public class BuildingMarket {
     public static void main(String[] args){
 
         BuildingMarket b = new BuildingMarket();
-        System.out.println(b.getDepartments());
+        System.out.println(b.findUnderPrice("Plumbing", "Toilet", 10)[0].name);
+        System.out.println(b.findByPrice("Plumbing", 1)[0].name);
+        System.out.println(b.findByPrice("Plumbing", 1)[0].name);
+
     }
 
     public BuildingMarket(){
@@ -102,16 +105,16 @@ public class BuildingMarket {
 
     }
 
-    public Good findUnderPrice(String departmentName, String goodName, double goodPrice){
-        return new Good(goodName, goodPrice);
+    public Good[] findUnderPrice(String departmentName, String goodName, double goodPrice){
+        return departments.get(departmentName).findUnderPrice(goodName, goodPrice);
     }
 
-    public Good findByPrice(String departmentName, String goodName, double goodPrice){
-        return new Good(goodName, goodPrice);
+    public Good[] findByPrice(String departmentName, double goodPrice){
+        return departments.get(departmentName).findByPrice(goodPrice);
     }
 
-    public Good findByName(String departmentName, String goodName, double goodPrice){
-        return new Good(goodName, goodPrice);
+    public Good[] findByPrice(String departmentName, String goodName){
+        return departments.get(departmentName).findByName(goodName);
     }
 
     public HashMap<String, Collection> getDepartments(){
