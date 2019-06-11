@@ -11,7 +11,7 @@ import goods.supplies.*;
 
 public class BuildingMarket {
 
-    String[] DepartmentsName = {"Plumbing", "Furniture", "Floor", "Wall", "Supplies", "Tool", "Electricity"};
+    String[] DEPARTMENTNAMES = {"Plumbing", "Furniture", "Floor", "Wall", "Supplies", "Tool", "Electricity"};
     HashMap<String, Collection> departments = new HashMap<String, Collection>();
 
     public static void main(String[] args){
@@ -121,8 +121,22 @@ public class BuildingMarket {
         return departments;
     }
 
-//    public HashMap<String, Collection> formDefaultPacakge(){
-//      return departments;
-//    }
+    public Good[] formDefaultPacakge() {
+        int countGoods = 0;
+        for (int i = 0; i < DEPARTMENTNAMES.length; ++i) {
+            countGoods+= departments.get(DEPARTMENTNAMES[i]).getLength();
+        }
+
+        Good[] defaultPackage = new Good[countGoods];
+
+        int k = 0;
+        for(int i = 0; i < DEPARTMENTNAMES.length; ++i) {
+            departments.get(DEPARTMENTNAMES[i]).getLength();
+            for(int j=0; j<departments.get(DEPARTMENTNAMES[i]).getLength(); ++j){
+                defaultPackage[k] = departments.get(DEPARTMENTNAMES[i]).getEl(j);
+            }
+        }
+        return defaultPackage;
+    }
 
 }

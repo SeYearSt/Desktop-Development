@@ -10,6 +10,14 @@ public class Collection {
         this.goods = goods;
     }
 
+    public int getLength(){
+        return goods.length;
+    }
+
+    public Good getEl(int i){
+        return goods[i];
+    }
+
     public Good[] findUnderPrice(String name, double price){
         int countGoodsUnderPrice = 0;
         for(int i=0; i<goods.length; ++i) {
